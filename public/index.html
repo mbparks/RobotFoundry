@@ -3,13 +3,14 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#f6f3e9"><meta name="description" content="Make a cut-paper robot at the Green Shoe Garage assembly bench. Pose interchangeable parts and download your creation.">
-<title>Paperbot Foundry · Green Shoe Garage</title><link rel="icon" href="mark.svg" type="image/svg+xml"><link rel="stylesheet" href="workshop.css">
+<title>Paperbot Foundry · Green Shoe Garage</title><link rel="icon" href="mark.svg" type="image/svg+xml"><script src="appearance.js"></script><link rel="stylesheet" href="workshop.css">
 <script defer src="cutouts.js"></script><script defer src="parts.js"></script><script defer src="workshop.js"></script>
 </head>
 <body>
 <header class="masthead"><div class="shell mast-inner">
 <div class="brand"><img src="mark.svg" width="48" height="48" alt=""><div><div class="brand-name">Paperbot Foundry</div><div class="brand-by">GREEN SHOE GARAGE</div></div></div>
 <nav aria-label="Project"><button id="new" class="quiet"><i data-icon="new"></i><span>New build</span></button><button id="open" class="quiet"><i data-icon="folder"></i><span>Open JSON</span></button><span class="nav-line"></span><button id="settings" class="icon" aria-label="Appearance and help" title="Appearance and help"><i data-icon="settings"></i></button></nav>
+<button id="dark-toggle" class="theme-switch" type="button" aria-pressed="false"><i data-icon="moon"></i>Dark mode<span class="switch-track" aria-hidden="true"></span></button>
 </div></header>
 <main class="shell">
 <div class="intro"><div><h1>Assembly bench<span class="title-dot">.</span></h1><p>Choose from 168 paper parts. Give each piece its own colors, print, and pose.</p></div><button class="primary" id="export"><i data-icon="download"></i>Export robot</button></div>
@@ -39,7 +40,7 @@
 <div class="mirrors"><button id="flip" aria-label="Mirror horizontally" aria-pressed="false"><i data-icon="flip"></i>Mirror X</button><button id="flip-y" aria-label="Mirror vertically" aria-pressed="false"><i data-icon="flipY"></i>Mirror Y</button></div><div class="edit-tools"><button id="copy" class="icon" aria-label="Duplicate part" title="Duplicate part"><i data-icon="copy"></i></button><button id="raise" class="icon" aria-label="Bring forward one layer" title="Bring forward one layer"><i data-icon="up"></i></button><button id="lower" class="icon" aria-label="Send back one layer" title="Send back one layer"><i data-icon="down"></i></button><button id="remove" class="icon" aria-label="Remove part" title="Remove part"><i data-icon="trash"></i></button></div></div></div>
 <div id="save-state" class="save-state"><i data-icon="check"></i><span>Saved on this device</span></div></section>
 </div>
-<footer><span><i data-icon="nut"></i>Green Shoe Garage <b>/</b> <span>Paperbot Foundry</span></span><span>v1.1.0</span></footer>
+<footer><span><i data-icon="nut"></i>Green Shoe Garage <b>/</b> <span>Paperbot Foundry</span></span><span>v1.1.1</span></footer>
 </main>
 <input type="file" id="import-file" accept=".json,application/json" hidden>
 <dialog id="modal"><div class="dialog-heading"><h2 id="dialog-title"></h2><button id="close" class="icon" aria-label="Close dialog"><i data-icon="close"></i></button></div><div id="dialog-content"></div></dialog>

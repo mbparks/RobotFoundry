@@ -2,8 +2,9 @@
   "use strict";
   const {groups,palettes,defs,drawing,patterns,paperColors,stockNames}=PaperParts;
   const $=id=>document.getElementById(id);
-  const NS="http://www.w3.org/2000/svg", KEY="gsg.paperbot-foundry.project.v1", PREF="gsg.paperbot-foundry.appearance", MAX=160;
+  const NS="http://www.w3.org/2000/svg", KEY="gsg.paperbot-foundry.project.v1", MAX=160;
   const glyphs={
+    moon:"M20 15A8.6 8.6 0 0 1 9 4a8.8 8.8 0 1 0 11 11Z",
     search:"M17 17l5 5M19 10a8 8 0 1 1 -16 0 8 8 0 1 1 16 0",paint:"M3 4h14v6H3zM17 7h3v6l-9 2v6H8v-8l9-2",flipY:"M2 12h3m3 0h3m3 0h3m3 0h2M8 9l9-6v6zm0 6 9 6v-6z",
     new:"M12 4v16M4 12h16",folder:"M3 18V6h7l2 3h9v3M3 19l3-7h16l-3 7Z",
     settings:"M3 7h18M3 17h18M8 4v6m9 4v6",sliders:"M4 6h16M4 12h16M4 18h16M8 3v6m8 0v6m-6 0v6",
@@ -45,13 +46,10 @@
       ids.add(p.id);return {id:p.id,group:p.group,variant:p.variant,side:p.side,x:p.x,y:p.y,angle:p.angle,scale:p.scale,flip:p.flip,flipY:style.flipY,colors:style.colors?[...style.colors]:null,pattern:style.pattern,ink:style.ink};
     });return {format:"paperbot-foundry",schemaVersion:2,name:data.name,colors:[...data.colors],parts};
   }
-  let project=starter(),selected=null,category="heads",side="left",theme="workshop",grid=true,startError="",saveReady=true;
+  let project=starter(),selected=null,category="heads",side="left",grid=PaperAppearance.grid,startError="",saveReady=true;
   try{
     const raw=localStorage.getItem(KEY);
     if(raw!==null){project=validate(JSON.parse(raw))}
-    const prefs=JSON.parse(localStorage.getItem(PREF)||"{}");
-    if(["workshop","night","contrast"].includes(prefs.theme))theme=prefs.theme;
-    grid=prefs.grid!==false;
   }catch{startError="Local storage could not be read. Open a JSON backup or begin a new build.";saveReady=false}
   let past=[],future=[],noticeTimer=0,drag=null,format="png",rasterSize=1200,background="transparent",generation=0;
   const current=()=>project.parts.find(p=>p.id===selected);
@@ -63,7 +61,7 @@
     catch{saveReady=false}
     $("save-state").innerHTML=icon(saveReady?"check":"warning")+`<span>${saveReady?"Saved on this device":"Local save unavailable · export JSON"}</span>`;
   }
-  function prefs(){try{localStorage.setItem(PREF,JSON.stringify({theme,grid}))}catch{notify("Appearance preferences could not be saved on this device.")}}
+  function prefs(){try{localStorage.setItem(PaperAppearance.storageKey,JSON.stringify({theme:PaperAppearance.mode,grid}))}catch{notify("Appearance preferences could not be saved on this device.")}}
   function history(before){
     if(before===snapshot())return;
     past.push(before);if(past.length>60)past.shift();future=[];storeProject();syncUndo();
@@ -119,7 +117,7 @@
     $("mat-grid").innerHTML=`<defs><pattern id="fine" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="currentColor" stroke-opacity=".20" stroke-width=".8"/></pattern><pattern id="major" width="100" height="100" patternUnits="userSpaceOnUse"><rect width="100" height="100" fill="url(#fine)"/><path d="M100 0H0V100" fill="none" stroke="currentColor" stroke-opacity=".43" stroke-width="1.25"/></pattern></defs>
     ${grid?'<rect width="600" height="600" fill="url(#major)"/><path d="'+ticks+'" fill="none" stroke="currentColor" opacity=".69"/><g fill="currentColor" opacity=".8" font-family="monospace" font-size="8">'+nums+'</g>':""}
     <g fill="none" stroke="currentColor" opacity=".72" stroke-width="1.35"><path d="M31 46V32h14m510 0h14v14M31 554v14h14m510 0h14v-14"/></g>`;
-    $("grid-btn").setAttribute("aria-pressed",String(grid));document.documentElement.dataset.theme=theme;
+    $("grid-btn").setAttribute("aria-pressed",String(grid));
   }
   const catalog=Object.entries(groups).flatMap(([group,g])=>g.names.map((name,variant)=>({group,variant,name})));
   const pageSize=6;
@@ -287,9 +285,15 @@
   preview();
 }
   $("part-finish").onclick=editFinish;
+  function chooseTheme(mode){
+    PaperAppearance.choose(mode);
+    prefs();
+  }
+  PaperAppearance.apply();
+  $("dark-toggle").onclick=()=>chooseTheme(document.documentElement.dataset.theme==="night"?"workshop":"night");
   $("settings").onclick=()=>{
-    modal("Workshop settings",`<label class="label" for="appearance">Appearance</label><select id="appearance"><option value="workshop">Workshop light</option><option value="night">Night mode</option><option value="contrast">High contrast</option></select><p class="modal-copy">Drag individual pieces on the mat. Use Part adjustment to select overlapping pieces, change their size or angle, duplicate them, or change their layer order.</p><p class="note">With the mat focused, arrow keys move a selected piece by one unit. Hold Shift for ten. Delete removes the piece. Use Ctrl or ⌘ Z to undo.</p><p class="note">Your browser saves the current build on this device. Export JSON to keep a backup or edit on another device.</p>`);
-    $("appearance").value=theme;$("appearance").onchange=e=>{theme=e.target.value;drawGrid();prefs()};
+    modal("Workshop settings",`<label class="label" for="appearance">Appearance</label><select id="appearance"><option value="system">Use device setting</option><option value="workshop">Light mode</option><option value="night">Dark mode</option><option value="contrast">High contrast</option></select><p class="modal-copy">Drag individual pieces on the mat. Use Part adjustment to select overlapping pieces, change their size or angle, duplicate them, or change their layer order.</p><p class="note">With the mat focused, arrow keys move a selected piece by one unit. Hold Shift for ten. Delete removes the piece. Use Ctrl or ⌘ Z to undo.</p><p class="note">Your browser saves the current build on this device. Export JSON to keep a backup or edit on another device.</p>`);
+    $("appearance").value=PaperAppearance.mode;$("appearance").onchange=e=>chooseTheme(e.target.value);
   };
   // Download artwork and editable project data independently of the editor chrome.
   function exportSvg(bg){

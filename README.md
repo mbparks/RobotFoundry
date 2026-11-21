@@ -1,4 +1,4 @@
-# Paperbot Foundry v1.1.0
+# Paperbot Foundry v1.1.1
 
 A Green Shoe Garage workshop for building cut-paper robots. Chip Boardman Gearhart III is the editable starter model. Choose **New build → Empty mat** for a blank project.
 
@@ -17,7 +17,7 @@ The app uses static HTML, CSS, JavaScript, SVG, and a bundled font. The files in
 
 Browse 168 designs in ten categories, or search across the whole drawer by name. Choose a design to swap that piece or add it to an empty slot. Arms, hands, and legs have independent left and right slots. Select any part on the mat to drag it. The **Part adjustment** menu also reaches pieces hidden behind others. Rotate, scale, mirror horizontally or vertically, duplicate, remove, or change stacking order. Arrow keys move the selected piece when the mat has focus. Hold Shift for ten-unit steps. Undo and redo are available during the editing session.
 
-Select a **Robot palette** for the shared paper stocks. To style one piece, select it and choose **Colors & pattern**. Change any paper swatch to give that piece its own colors. Choose plain paper or one of seven prints and set its ink. The preview updates as you work. **Apply to piece** saves the changes. **Use robot colors** reconnects a piece to the shared palette while preserving its print. Duplicates carry independent copies of the originals’ finishes. Workshop settings include night and high-contrast appearances.
+Select a **Robot palette** for the shared paper stocks. To style one piece, select it and choose **Colors & pattern**. Change any paper swatch to give that piece its own colors. Choose plain paper or one of seven prints and set its ink. The preview updates as you work. **Apply to piece** saves the changes. **Use robot colors** reconnects a piece to the shared palette while preserving its print. Duplicates carry independent copies of the originals’ finishes. Switch the workshop between light and dark with **Dark mode** in the header. On first use, the workshop follows your device appearance. Your manual choice is saved in this browser. In **Workshop settings → Appearance**, choose **Use device setting** to resume automatic switching, or choose **High contrast**. Display appearance only affects the editor. The robot retains its paper colors in every export.
 
 ## Export and reopen
 
