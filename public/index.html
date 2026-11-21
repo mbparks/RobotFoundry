@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en" data-theme="workshop">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f6f3e9"><meta name="description" content="Make a cut-paper robot at the Green Shoe Garage assembly bench. Pose interchangeable parts and download your creation.">
+<title>Paperbot Foundry · Green Shoe Garage</title><link rel="icon" href="mark.svg" type="image/svg+xml"><link rel="stylesheet" href="workshop.css">
+<script defer src="cutouts.js"></script><script defer src="parts.js"></script><script defer src="workshop.js"></script>
+</head>
+<body>
+<header class="masthead"><div class="shell mast-inner">
+<div class="brand"><img src="mark.svg" width="48" height="48" alt=""><div><div class="brand-name">Paperbot Foundry</div><div class="brand-by">GREEN SHOE GARAGE</div></div></div>
+<nav aria-label="Project"><button id="new" class="quiet"><i data-icon="new"></i><span>New build</span></button><button id="open" class="quiet"><i data-icon="folder"></i><span>Open JSON</span></button><span class="nav-line"></span><button id="settings" class="icon" aria-label="Appearance and help" title="Appearance and help"><i data-icon="settings"></i></button></nav>
+</div></header>
+<main class="shell">
+<div class="intro"><div><h1>Assembly bench<span class="title-dot">.</span></h1><p>Choose from 168 paper parts. Give each piece its own colors, print, and pose.</p></div><button class="primary" id="export"><i data-icon="download"></i>Export robot</button></div>
+<div class="workshop">
+<section class="panel drawer" aria-labelledby="drawer-title">
+<div class="panel-title"><i data-icon="drawer"></i><h2 id="drawer-title">Parts drawer</h2></div>
+<div class="drawer-body"><div class="label-line"><label for="category" class="label">Category</label><span class="mini" id="category-count"></span></div>
+<select id="category"></select>
+<label class="search-box"><span class="sr">Search all parts</span><i data-icon="search"></i><input type="search" id="part-search" placeholder="Search all parts…" autocomplete="off"></label>
+<fieldset id="sides" hidden><legend class="sr">Limb side</legend><label><input type="radio" name="side" value="left" checked> Left</label><label><input type="radio" name="side" value="right"> Right</label></fieldset>
+<div class="tiles" id="tiles"></div>
+<div class="pages" id="pages"><button id="prev-page" aria-label="Previous page of parts">Previous</button><span id="page-info" class="mini" aria-live="polite"></span><button id="next-page" aria-label="Next page of parts">Next</button></div>
+<p class="hint" id="drawer-hint"><i data-icon="pointer"></i><span></span></p></div></section>
+<section class="mat-panel" aria-label="Robot assembly mat">
+<div class="mat-top"><span><i data-icon="crop"></i>Cutting mat</span><span class="size-label">600 × 600</span></div>
+<div class="mat-area"><div class="art-frame" id="frame">
+<svg id="mat-grid" viewBox="0 0 600 600" aria-hidden="true"></svg><svg xmlns="http://www.w3.org/2000/svg" id="stage" tabindex="0" role="group" aria-label="Robot canvas. Select a part and use arrow keys to move it." viewBox="0 0 600 600"></svg>
+<div class="mat-empty" id="mat-empty" hidden><i data-icon="drawer"></i><strong>Empty cutting mat</strong><span>Pick a part from the drawer to begin.</span></div>
+</div></div>
+<div class="mat-bottom"><div class="tools"><button id="undo" class="icon" title="Undo (Ctrl or Command Z)" aria-label="Undo"><i data-icon="undo"></i></button><button id="redo" class="icon" title="Redo" aria-label="Redo"><i data-icon="redo"></i></button></div><span class="mini part-count" id="part-count"></span><button id="grid-btn" class="grid-control" aria-pressed="true"><i data-icon="grid"></i>Grid</button></div></section>
+<section class="panel sheet" aria-labelledby="sheet-title"><div class="panel-title"><i data-icon="sliders"></i><h2 id="sheet-title">Build sheet</h2></div>
+<div class="sheet-section"><label for="robot-name" class="label">Robot name</label><input id="robot-name" type="text" maxlength="80" autocomplete="off"></div>
+<div class="sheet-section"><div class="label-line"><span class="label">Robot palette</span><button id="custom" class="icon compact" title="Mix custom paper colors" aria-label="Mix custom paper colors"><i data-icon="sliders"></i></button></div><div id="palettes" class="palettes"></div></div>
+<div class="sheet-section part-edit"><label class="label" for="piece">Part adjustment</label><select id="piece"></select><div id="selection-empty" class="adjust-hint">Select a piece to change its colors, pattern, or pose.</div>
+<div id="adjustments" hidden><button id="part-finish" class="finish-button"><i data-icon="paint"></i> Colors &amp; pattern</button><div id="finish-summary" class="mini"></div><div class="range-row"><label for="angle">Angle</label><output id="angle-out" for="angle"></output></div><input type="range" id="angle" min="-180" max="180">
+<div class="range-row"><label for="scale">Scale</label><output id="scale-out" for="scale"></output></div><input type="range" id="scale" min="30" max="220">
+<div class="mirrors"><button id="flip" aria-label="Mirror horizontally" aria-pressed="false"><i data-icon="flip"></i>Mirror X</button><button id="flip-y" aria-label="Mirror vertically" aria-pressed="false"><i data-icon="flipY"></i>Mirror Y</button></div><div class="edit-tools"><button id="copy" class="icon" aria-label="Duplicate part" title="Duplicate part"><i data-icon="copy"></i></button><button id="raise" class="icon" aria-label="Bring forward one layer" title="Bring forward one layer"><i data-icon="up"></i></button><button id="lower" class="icon" aria-label="Send back one layer" title="Send back one layer"><i data-icon="down"></i></button><button id="remove" class="icon" aria-label="Remove part" title="Remove part"><i data-icon="trash"></i></button></div></div></div>
+<div id="save-state" class="save-state"><i data-icon="check"></i><span>Saved on this device</span></div></section>
+</div>
+<footer><span><i data-icon="nut"></i>Green Shoe Garage <b>/</b> <span>Paperbot Foundry</span></span><span>v1.1.0</span></footer>
+</main>
+<input type="file" id="import-file" accept=".json,application/json" hidden>
+<dialog id="modal"><div class="dialog-heading"><h2 id="dialog-title"></h2><button id="close" class="icon" aria-label="Close dialog"><i data-icon="close"></i></button></div><div id="dialog-content"></div></dialog>
+<p id="notice" class="notice" role="status" aria-live="polite"></p>
+</body></html>
